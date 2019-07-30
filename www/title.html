@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <script src="lib/onsenui/js/onsenui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+  <link rel="stylesheet" href="css/title.css">
+
+  <script>
+    ons.ready(function() {
+      console.log("Onsen UI is ready!");
+    });
+
+    //iphoneXの余白対策
+    if (ons.platform.isIPhoneX()) {
+      document.documentElement.setAttribute('onsflag-iphonex-portrait', '');
+      document.documentElement.setAttribute('onsflag-iphonex-landscape', '');
+    }
+
+    //ncmb接続
+    var applicationKey = "e5487cf4017eedf884be6412ce8533eb7cc7479f476fb1eff68d3b11a9d06c17";
+    var clientKey = "507880bfde91eee6800847a86657e56710a4313612cf4be1df8ca73dc1df7401";
+    var  ncmb = new NCMB(applicationKey,clientKey);
+
+    // インターネット接続確認
+    document.addEventListener("offline", onOffline, false);//つながっていない場合
+    function onOffline() {
+        alert("インターネット接続してください");
+    }
+    document.addEventListener("online", onOnline, false);
+    function onOnline() {
+      monaca.getDeviceId(function(id){
+      var device = id;
+      var userData = ncmb.DataStore("UserData");
+      userData.equalTo("device",device)
+        .equalTo("startFlag","true")//デバイス情報とフラグがtrueを取得
+        .fetchAll()//すべて取得
+        .then(function(results){//成功
+          var test = JSON.stringify(results);
+          if(test != "[]"){//[]の中身が入っている
+            setTimeout("openmain()", 800); //mainに飛ぶ
+          }else{//[]に何も入っていない
+            setTimeout("openstart()", 800); //mainに飛ぶ
+          }
+        })
+        .catch(function(error){//失敗
+          alert("再起動してください");
+      });
+      });
+    }
+
+    //mainを開く処理
+    function openmain(){
+     window.location.href = 'sector.html';
+    }
+
+    //startを開く処理
+    function openstart(){
+     window.location.href = 'sector.html';
+    }
+
+    $(window).on('load', function(){
+      $('body').removeClass('fadeout');
+    });
+    
+    $(function() {
+    // ハッシュリンク(#)と別ウィンドウでページを開く場合はスルー
+    $('a:not([href^="#"]):not([target])').on('click', function(e){
+      e.preventDefault(); // ナビゲートをキャンセル
+      url = $(this).attr('href'); // 遷移先のURLを取得
+      if (url !== '') {
+        $('body').addClass('fadeout');  // bodyに class="fadeout"を挿入
+        setTimeout(function(){
+          window.location = url;  // 0.2秒後に取得したURLに遷移
+        }, 200);
+      }
+      return false;
+    });
+  });
+  </script>  
+</head>
+  <body class="fadeout">
+  <section class="page one">
+    <article>
+      <div class="back">
+      <img src="resources/title.png" alt="タイトル" id="title" >
+      </div>
+    </article>
+  </section>
+</body>
+</html>

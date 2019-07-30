@@ -1,0 +1,952 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <script src="lib/onsenui/js/onsenui.min.js"></script>
+  <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
+  <script src='fullcalendar/lib/jquery.min.js'></script>
+  <script src='fullcalendar/lib/moment.min.js'></script>
+  <script src='fullcalendar/fullcalendar.js'></script>
+  <script src='fullcalendar/locale/ja.js'></script>
+
+  <!-- OnsenUIの使用 -->
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+  <link rel="stylesheet" href="css/styles.css">
+   <!-- 自分で作成したjsファイル -->
+  <script src='calendar.js'></script>
+  <script src="js/cssua.min.js"></script>
+  <script src="js/app.js"></script>
+
+    <script>
+      window.fn = {};
+      window.fn.toggleMenu = function () {
+        document.getElementById('appSplitter').right.toggle();
+      };
+
+      window.fn.loadView = function (index) {
+        document.getElementById('appTabbar').setActiveTab(index);
+        document.getElementById('sidemenu').close();
+      };
+
+      window.fn.loadLink = function (url) {
+        window.open(url, '_blank');
+      };
+
+      window.fn.pushPage = function (page, anim) {
+        if (anim) {
+          document.getElementById('appNavigator').pushPage(page.id, { data: { title: page.title }, animation: anim });
+        } else {
+          document.getElementById('appNavigator').pushPage(page.id, { data: { title: page.title } });
+        }
+      };
+
+      ons.ready(function() {
+        console.log("Onsen UI is ready!");
+      });
+
+    //NCMBデータベース登録キー
+    var applicationKey = "e5487cf4017eedf884be6412ce8533eb7cc7479f476fb1eff68d3b11a9d06c17";
+    var clientKey = "507880bfde91eee6800847a86657e56710a4313612cf4be1df8ca73dc1df7401";
+    var ncmb = new NCMB(applicationKey, clientKey);
+    // NCMB.Objectのサブクラスを生成
+    var BASSARI = ncmb.DataStore("BASSARI");
+    // クラスの新しいインスタンスを生成
+    var bassari = new BASSARI();
+    
+      var startDate = moment().startOf("Month");    // 開始日時
+      var endDate = moment().endOf("Month");  // 終了日時
+      var now   = new Date();
+      var Month = now.getMonth();   //月をとる、書き方は多分違う
+      var id =1;
+      BASSARI.equalTo("username",id)
+      .fetchAll()
+      .then(function(results) {
+        console.log(results);
+        $('#calendar-view').fullCalendar('addEventSource',results);
+        var array=results;
+        events:results //json形式のをイベントに追加してくれるはずなのでデータベースからの通信を書けばいいと思う
+
+      })
+      .catch(function(err){
+        console.log(err);
+            
+          });
+
+
+        document.addEventListener('prechange', function(event) {
+    document.querySelector('ons-toolbar .center')
+      .innerHTML = event.tabItem.getAttribute('label');
+  });
+
+        
+      $(function () {
+    $('#calendar-view').fullCalendar({
+
+      contentHeight: 'auto',
+
+      eventClick: function(item, jsEvent, view) {
+      //クリックしたイベントのタイトルが取れるよ
+      alert ('買ったもの画面へ遷移しますか？')
+      document.location.assign('index.html');
+    },
+    events:[] //ここに入れれたら最高
+
+    
+      // full calendarをカスタマイズする際にここにオプションを記述する。
+    })
+  })
+    </script>
+</head>
+<body>
+  <!-- ナビゲーター タブとスライドメニューの表示 -->
+  <ons-navigator id="appNavigator" swipeable swipe-target-width="80px">
+  <ons-page>
+    <ons-splitter id="appSplitter">
+      <ons-splitter-side id="sidemenu" page="sidemenu.html" swipeable side="right" collapse="" width="220px"></ons-splitter-side>
+      <ons-splitter-content page="tabbar.html"></ons-splitter-content>
+    </ons-splitter>
+  </ons-page>
+  </ons-navigator>
+
+  <template id="tabbar.html">
+    <ons-page id="tabbar-page">
+      <ons-toolbar>
+        <div class="center">カレンダー</div> <!--一番最初に開くタイトル-->
+        <div class="right">
+          <ons-toolbar-button onclick="fn.toggleMenu()">
+            <ons-icon icon="ion-navicon, material:md-menu"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <!--TAB--><!---->
+      </ons-toolbar>
+      <ons-tabbar swipeable id="appTabbar" position="auto">
+        <ons-tab label="Twitter" icon="fa-twitter" page="twitter.html" ></ons-tab>
+        <ons-tab page="setter.html" label="買ったもの" icon="shopping-bag" "></ons-tab>
+        <ons-tab label="カレンダー" icon="ion-calendar" page="calender.html"active></ons-tab>
+        <ons-tab label="買わないリスト" icon="times" page="edit.html"></ons-tab>
+        <ons-tab page="clear.html" label="身近整理" icon="broom" "></ons-tab>
+      </ons-tabbar>
+
+      <script>
+        ons.getScriptPage().addEventListener('prechange', function(event) {
+          if (event.target.matches('#appTabbar')) {
+            event.currentTarget.querySelector('ons-toolbar .center').innerHTML = event.tabItem.getAttribute('label');
+          }
+        });
+      </script>
+    </ons-page>
+  </template>
+
+  <!--スライドメニュー-->
+  <template id="sidemenu.html">
+    <ons-page>
+
+      <ons-list-title>アクセス</ons-list-title>
+      <ons-list>
+        <ons-list-item onclick="fn.loadView(2)">
+          <div class="left">
+            
+            <ons-icon fixed-width class="list-item__icon" icon="ion-calendar, material:md-home"></ons-icon>
+          </div>
+          <div class="center">
+            カレンダー
+          </div>
+        </ons-list-item>
+        <ons-list-item onclick="fn.loadView(3)">
+          <div class="left">
+            <ons-icon fixed-width class="list-item__icon" icon="times, material:md-edit"></ons-icon>
+          </div>
+          <div class="center">
+           買わないリスト
+          </div>
+        </ons-list-item>
+        <ons-list-item onclick="fn.loadView(4)">
+          <div class="left">
+            <ons-icon fixed-width class="list-item__icon" icon="broom, material: md-movie-alt"></ons-icon>
+          </div>
+          <div class="center">
+            身近整理
+          </div>
+          </ons-list-item>
+           <ons-list-item onclick="fn.loadView(1)">
+          <div class="left">
+            <ons-icon fixed-width class="list-item__icon" icon="shopping-bag, material: md-movie-alt"></ons-icon>
+          </div>
+          <div class="center">
+            買ったものリスト
+          </div>
+          </ons-list-item>
+          <ons-list-item onclick="fn.loadView(0)">
+          <div class="left">
+            <ons-icon fixed-width class="list-item__icon" icon="fa-twitter, material: md-movie-alt"></ons-icon>
+          </div>
+          <div class="center">
+            Twitter
+          </div>
+          </ons-list-item>
+      </ons-list>
+
+      <ons-list-title style="margin-top: 10px">リンク</ons-list-title>
+      <ons-list>
+        <ons-list-item onclick="fn.loadLink('https://twitter.com')">
+          <div class="left">
+            <ons-icon fixed-width class="list-item__icon" icon="ion-social-twitter"></ons-icon>
+          </div>
+          <div class="center">
+            Twitter
+          </div>
+          <div class="right">
+            <ons-icon icon="fa-external-link"></ons-icon>
+          </div>
+        </ons-list-item>
+                <ons-list-item onclick="fn.loadLink('https://www.youtube.com/channel/UCx1nAvtVDIsaGmCMSe8ofsQ')">
+          <div class="left">
+            <ons-icon fixed-width class="list-item__icon" icon="ion-film-marker"></ons-icon>
+          </div>
+          <div class="center">
+            Youtube
+          </div>
+          <div class="right">
+            <ons-icon icon="fa-external-link"></ons-icon>
+          </div>
+        </ons-list-item>
+      </ons-list>
+
+      <script>
+        ons.getScriptPage().onInit = function() {
+          // Set ons-splitter-side animation
+          this.parentElement.setAttribute('animation', ons.platform.isAndroid() ? 'overlay' : 'reveal');
+        };
+      </script>
+
+      <style>
+        ons-list-item {
+          color: #444;
+        }
+      </style>
+    </ons-page>
+  </template>
+
+    <template id="calender.html">
+    <ons-page>
+      <p style="text-align: center;">
+          <div id='calendar-view'></div>
+          <script>
+            $(function () {
+          $('#calendar-view').fullCalendar({
+          });
+        })
+            </script>
+      </p>
+    </ons-page>
+  </template>
+
+  <template id="edit.html">
+    <ons-page>
+
+      <script>
+
+        var LULE = ncmb.DataStore("LULE");
+        var id=1;
+        var act = "お疲れ様でした！"
+        LULE.equalTo("username",id)
+         .notEqualTo("text",act)
+         .fetchAll()
+         .then(function(results){
+           //成功した時は今のところログをだす。
+           console.log(results);
+           for (var i = 0; i < results.length; i++) {
+             
+             var arr = results[i];
+              var title=arr.title
+              var body=arr.body
+              var time=arr.time
+              var text=arr.text
+              var targetDay = new Date(time);
+              // 1日のマイクロ秒で除算をすると
+              // 開催日までの日数が算出できる
+              var now   = new Date();
+              var remainDay = Math.floor((targetDay - now) / (24*60*60*1000)-1);
+
+              remainDay++;
+              
+              if (remainDay > 0) {
+              text= ("残り"+remainDay+"日");
+              }
+              else if (remainDay < 0) {
+              text=("お疲れ様でした！");
+              }
+              else {
+              text=("今日までです！");
+              }
+              $("#todo-list").append("<ons-card><h3>" + title + "</h3>" + body + "<div align='right'>"+text+"</div></ons-card>")
+              }
+              $("#todo-list").listview('refresh');
+              })
+            .catch(function(err){
+                console.log(err);//失敗した時は今のところログをだす
+              });
+
+    
+  </script>
+        <div data-role="content">
+          <span data-role="listview" data-inset="true" id="todo-list"></span>
+        </div>
+          <ons-speed-dial position="bottom right" direction="up" :open.sync="spdOpen">
+            <ons-fab>
+              <ons-icon icon="list"></ons-icon>
+            </ons-fab>
+            <ons-speed-dial-item onclick="fn.pushPage({'id': 'notbuy.html', 'title': '買わない物追加'})">
+              <ons-icon icon="md-edit"></ons-icon>
+            </ons-speed-dial-item>
+            <ons-speed-dial-item onclick="fn.pushPage({'id': 'compbuy.html', 'title': '終了したもの'})">
+              <ons-icon icon="clipboard-check"></ons-icon>
+            </ons-speed-dial-item>
+          </ons-speed-dial>
+
+    </div>
+
+    </ons-page>
+  </template>
+
+  <template id="compbuy.html">
+    <ons-page>
+
+      <script>
+
+        var LULE = ncmb.DataStore("LULE");
+        var id=1;
+        var act = "お疲れ様でした！"
+        LULE.equalTo("username",id)
+         .equalTo("text",act)
+         .fetchAll()
+         .then(function(results){
+           //成功した時は今のところログをだす。
+           console.log(results);
+           for (var i = 0; i < results.length; i++) {
+             
+             var arr = results[i];
+              var title=arr.title
+              var body=arr.body
+              var time=arr.time
+              var text=arr.text
+              var targetDay = new Date(time);
+              // 1日のマイクロ秒で除算をすると
+              // 開催日までの日数が算出できる
+              var now   = new Date();
+              var remainDay = Math.floor((targetDay - now) / (24*60*60*1000)-1);
+
+              remainDay++;
+              
+              if (remainDay > 0) {
+              text= ("残り"+remainDay+"日");
+              }
+              else if (remainDay < 0) {
+              text=("お疲れ様でした！");
+              }
+              else {
+              text=("今日までです！");
+              }
+              $("#todo-com-list").append("<ons-card><h3>" + title + "</h3>" + body + "<div align='right'>"+text+"</div></ons-card>")
+              }
+              $("#todo-com-list").listview('refresh');
+              })
+            .catch(function(err){
+                console.log(err);//失敗した時は今のところログをだす
+              });
+
+    
+  </script>
+      <ons-toolbar>
+      <div class="left">
+        <ons-back-button>買わない物</ons-back-button>
+      </div>
+      <div class="center"></div>
+    </ons-toolbar>
+        <div data-role="content">
+          <span data-role="listview" data-inset="true" id="todo-com-list"></span>
+        </div>
+
+    </ons-page>
+  </template>
+
+  <template id="notbuy.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>リスト</ons-back-button>
+        </div>
+        <div class="center"></div>
+      </ons-toolbar>
+
+      <script>
+        ons.getScriptPage().onInit = function () {
+          this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+        };
+
+function addTodo(camera_url) {
+    var title = $("#todo-title").val();
+    var body = $("#todo-body").val();
+    var time =$("#todo-time").val();
+    var text
+    var targetDay = new Date(time);
+    // 1日のマイクロ秒で除算をすると
+    // 開催日までの日数が算出できる
+      var now   = new Date();
+    var remainDay = Math.floor((targetDay - now) / (24*60*60*1000)-1);
+
+    remainDay++;
+    
+    if (remainDay > 0) {
+    text= ("残り"+remainDay+"日");
+    }
+    else if (remainDay < 0) {
+    text=("お疲れ様でした！");
+    }
+    else {
+    text=("今日までです！");
+    }
+
+
+    // NCMB.Objectのサブクラスを生成
+        var LULE = ncmb.DataStore("LULE");
+
+    // クラスの新しいインスタンスを生成
+        var lule = new LULE();
+
+     lule.set("username",id)
+         .set("title",title)//捨てたものや買ったものの名前
+         .set("remainDay",remainDay)
+         .set("time",time) //カレンダーで月のものを表示させるためdateから月だけを取れない時はこれを使う 今のところMonth自体になにも入っていないので動かない
+         .set("targertDay",targetDay)
+         .set("text",text)
+         .set("body",body)//詳細
+         .set("dansyari",1)//捨てたものか買ったものかを判定するために必要かも？買ったものなら１、捨てたものなら０的な
+         //写真を保存できるか知らないのでエラーがでないよう、とりあえずは画像の保存は作っていない
+         .save()
+         .then(function(gameScore){
+          // 保存後の処理はリストに戻り登録したものを表示させる
+          alert('保存しました！');
+          document.getElementById("#todo-title").value = ''
+          document.location.href = "sector.html";//後で治す
+         })
+         .catch(function(err){
+          // エラー処理logを出すかは悩み中
+         });
+      };
+
+      </script>
+
+      <style>
+        .pull-hook-content {
+          color: #666;
+          transition: transform .25s ease-in-out;
+        }
+      </style>
+
+      <div data-role="content">
+        <div ><input id="todo-title" type="text" placeholder="買わない物の名前" class="text-area"></div>
+        <div ><textarea id="todo-body" style="height: 17em" placeholder="詳細"class="text-bigarea"></textarea></div>
+        <div ><input id="todo-time" type="date"class="text-num"></div>
+        <div ><input id="add-button" type="button" value="Save" onclick="addTodo()"class="text-save1"></div>
+        
+      </div>
+    </ons-page>
+  </template>
+
+  <template id="clear.html">
+    <ons-page>
+    <ons-card onclick="fn.pushPage({'id': 'timer.html', 'title': 'タイマー'})">
+      <div class="title">タイマー</div>
+      <div class="content">このタイマーを使って身近整理を行うと、とても集中できます。やる習慣をつけよう！</div>
+    </ons-card>
+    <ons-card onclick="fn.pushPage({'id': 'pull.html', 'title': '記録'})">
+      <div class="title">記録</div>
+      <div class="content">身近整理をしたものを記録しよう！</div>
+    </ons-card>
+    <ons-card onclick="fn.pushPage({'id': 'helper.html', 'title': 'ヘルプ'})">
+      <div class="title">ヘルプ</div>
+      <div class="content">身近整理ってどうやればいいの？初めてだからどうすればいいの？わからなければここをタップしてね！</div>
+    </ons-card>
+    <!-- <ons-card onclick="fn.pushPage({'id': 'soudann.html', 'title': '相談'})">
+      <div class="title">相談</div>
+      <div class="content">この機能はまだ実装されていません。</div>
+    </ons-card> -->
+
+        <style>
+      .intro {
+        text-align: center;
+        padding: 0 20px;
+        margin-top: 40px;
+      }
+
+      ons-card {
+        cursor: pointer;
+        color: #333;
+      }
+
+      .card__title,
+      .card--material__title {
+        font-size: 20px;
+      }
+    </style>
+    </ons-page>
+  </template>
+
+    <template id="twitter.html">
+      <ons-page>
+      <a class="twitter-timeline" width="500px" height="100%"  href="https://twitter.com/errorcode128/likes?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+     </ons-page>
+    </template>
+
+    <template id="setter.html">
+    <ons-page>
+      <script>
+
+        var BASSARI = ncmb.DataStore("BASSARI");
+        var id=1;
+        BASSARI.equalTo("username",id)
+         .fetchAll()
+         .then(function(results){
+           //成功した時は今のところログをだす。
+           console.log(results);
+           for (var i = 0; i < results.length; i++) {
+             var arr = results[i];
+              var title=arr.title
+              var body=arr.body
+              var start=arr.start
+              var remainDay=arr.remainDay
+          $("#buy-list").append("<ons-card><h3>" + title + "</h3>" + body + "<div align='right'>"+start+"</div></ons-card>")
+          }
+          $("#buy-list").listview('refresh');
+          })
+         .catch(function(err){
+            console.log(err);//失敗した時は今のところログをだす
+          });
+
+    
+  </script>
+        <div data-role="content">
+          <span data-role="listview" data-inset="true" id="buy-list"></span>
+        </div>
+
+    <ons-fab position="bottom right" onclick="fn.pushPage({'id': 'buy.html', 'title': '買った物追加'})">
+      <ons-icon icon="md-edit"></ons-icon>
+    </ons-fab>
+
+    </ons-page>
+  </template>
+
+   <template id="buy.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>リスト</ons-back-button>
+        </div>
+        <div class="center"></div>
+      </ons-toolbar>
+
+      <script>
+        ons.getScriptPage().onInit = function () {
+          this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+        };
+
+        function buyTodo(camera_url) {
+        var title = $("#todo-title").val();
+        var body = $("#todo-body").val();
+        var img_tag = "";
+        if (camera_url) {
+          img_tag = "<img src='" + camera_url + "'>";
+        }
+        var today = Date
+        
+        var now   = new today();
+        var Year = now.getFullYear();
+        var Month = now.getMonth() + 1;
+        var Day = now.getDate();
+        var mip = Year+"/"+Month+"/"+Day
+        
+        var Years=String(Year)
+        var Months=String(Month)
+        var Days=String(Day)
+
+        var day =Years+"-"+Months+"-"+Days;
+        var id =1;
+
+    // NCMB.Objectのサブクラスを生成
+        var BASSARI = ncmb.DataStore("BASSARI");
+
+    // クラスの新しいインスタンスを生成
+        var bassari = new BASSARI();
+
+      bassari.set("username",id)
+            .set("title",title)//捨てたものや買ったものの名前
+            .set("start",mip)//登録した日の日付
+            .set("month",Month) //カレンダーで月のものを表示させるためdateから月だけを取れない時はこれを使う 今のところMonth自体になにも入っていないので動かない
+            .set("body",body)//詳細
+            .set("dansyari",1)//捨てたものか買ったものかを判定するために必要かも？買ったものなら１、捨てたものなら０的な
+            //写真を保存できるか知らないのでエラーがでないよう、とりあえずは画像の保存は作っていない
+            .save()
+            .then(function(gameScore){
+              // 保存後の処理はリストに戻り登録したものを表示させる
+            alert('保存しました！');
+            document.getElementById("#todo-title").value = ''
+            document.location.href = "sector.html";//後で治す
+            })
+            .catch(function(err){
+              // エラー処理logを出すかは悩み中
+            })
+        };
+      </script>
+
+      <style>
+        .pull-hook-content {
+          color: #666;
+          transition: transform .25s ease-in-out;
+        }
+      </style>
+
+      <div data-role="content">
+        <div ><input id="todo-title" type="text" placeholder="買った物の名前" class="text-area"></div>
+        <div ><textarea id="todo-body" style="height: 17em" placeholder="詳細"class="text-bigarea" ></textarea></div>
+        <div ><input id="add-button" type="button" value="Save" onclick="buyTodo()"  class="text-save"></div>
+      </div>
+    </ons-page>
+  </template>
+
+  <template id="timer.html">
+    <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>身近整理</ons-back-button>
+      </div>
+      <div class="center"></div>
+    </ons-toolbar>
+
+    <script>
+      ons.getScriptPage().onInit = function () {
+        this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+        var pullHook = document.getElementById('タイマー');
+      };
+
+
+    </script>
+
+    <style>
+      .pull-hook-content {
+        color: #666;
+        transition: transform .25s ease-in-out;
+      }
+    </style>
+
+    <div id="timer">00:00</div>
+    <span id="button-place1"><button id="min" class="btn-square-min">1分</button></span>
+    <span id="button-place2"><button id="sec" class="btn-square-min">1秒</button></span>
+    <span id="button-place3"><button id="reset" class="btn-square-reset">リセット</button></span>
+    <span id="button-place4"><button id="start" class="btn-square-start">Start</button></span>
+    
+    <script src="js/life_timer.js"></script>
+    </ons-page>
+  </template>
+
+  <template id="pull.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>身近整理</ons-back-button>
+        </div>
+        <div class="center"></div>
+      </ons-toolbar>
+
+      <script>
+        ons.getScriptPage().onInit = function () {
+          this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+        };
+
+        var POI  = ncmb.DataStore("POI");
+        var id=1;
+        POI.equalTo("username",id)
+         .fetchAll()
+         .then(function(results){
+           //成功した時は今のところログをだす。
+           console.log(results);
+           for (var i = 0; i < results.length; i++) {
+             var arr = results[i];
+              var title=arr.title
+              var body=arr.body
+              var start=arr.start
+              var remainDay=arr.remainDay
+          $("#POI-list").append("<ons-card><h3>" + title + "</h3>" + body + "<div align='right'>"+start+"</div></ons-card>")
+          }
+          $("#POI-list").listview('refresh');
+          })
+         .catch(function(err){
+            console.log(err);//失敗した時は今のところログをだす
+          });
+        </script>
+        <div data-role="content">
+          <span data-role="listview" data-inset="true" id="POI-list"></span>
+        </div>
+
+        <ons-fab position="bottom right" onclick="fn.pushPage({'id': 'poi.html', 'title': '整理した物追加'})">
+          <ons-icon icon="md-edit"></ons-icon>
+        </ons-fab>
+    </ons-page>
+  </template>
+
+   <template id="poi.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>リスト</ons-back-button>
+        </div>
+        <div class="center"></div>
+      </ons-toolbar>
+
+      <script>
+        ons.getScriptPage().onInit = function () {
+          this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+        };
+
+        function poiTodo(camera_url) {
+        var title = $("#todo-title").val();
+        var body = $("#todo-body").val();
+        var img_tag = "";
+        if (camera_url) {
+          img_tag = "<img src='" + camera_url + "'>";
+        }
+        var today = Date
+        
+        var now   = new today();
+        var Year = now.getFullYear();
+        var Month = now.getMonth() + 1;
+        var Day = now.getDate();
+        var mip = Year+"/"+Month+"/"+Day
+        
+        var Years=String(Year)
+        var Months=String(Month)
+        var Days=String(Day)
+
+        var day =Years+"-"+Months+"-"+Days;
+        var id =1;
+
+    // NCMB.Objectのサブクラスを生成
+        var POI = ncmb.DataStore("POI");
+
+    // クラスの新しいインスタンスを生成
+        var poi = new POI();
+
+      poi.set("username",id)
+            .set("title",title)//捨てたものや買ったものの名前
+            .set("start",mip)//登録した日の日付
+            .set("month",Month) //カレンダーで月のものを表示させるためdateから月だけを取れない時はこれを使う 今のところMonth自体になにも入っていないので動かない
+            .set("body",body)//詳細
+            .set("dansyari",1)//捨てたものか買ったものかを判定するために必要かも？買ったものなら１、捨てたものなら０的な
+            //写真を保存できるか知らないのでエラーがでないよう、とりあえずは画像の保存は作っていない
+            .save()
+            .then(function(gameScore){
+              // 保存後の処理はリストに戻り登録したものを表示させる
+            alert('保存しました！');
+            document.getElementById("#todo-title").value = ''
+            document.location.href = "sector.html";//後で治す
+            })
+            .catch(function(err){
+              // エラー処理logを出すかは悩み中
+            })
+        };
+      </script>
+
+      <style>
+        .pull-hook-content {
+          color: #666;
+          transition: transform .25s ease-in-out;
+        }
+      </style>
+
+      <div data-role="content">
+        <div ><input id="todo-title" type="text" placeholder="整理した物の名前" class="text-area"></div>
+        <div ><textarea id="todo-body" style="height: 17em" placeholder="詳細"class="text-bigarea" ></textarea></div>
+        <div ><input id="add-button" type="button" value="Save" onclick="poiTodo()"  class="text-save"></div>
+      </div>
+    </ons-page>
+  </template>
+
+  <template id="helper.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>身近整理</ons-back-button>
+        </div>
+        <div class="center"></div>
+      </ons-toolbar>
+
+      <script>
+        ons.getScriptPage().onInit = function () {
+          this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+          var pullHook = document.getElementById('タイマー');
+
+        };
+      </script>
+
+      <style>
+        .pull-hook-content {
+          color: #666;
+          transition: transform .25s ease-in-out;
+        }
+      </style>
+
+      <ons-card onclick="fn.pushPage({'id': 'tyutorial.html', 'title': '初めての身近整理'})">
+        <div class="title" id="text-title-big">初めての方へ</div>
+        <div class="content" id="text1">ここを見て身近整理の大切なとこを学ぼう</div>
+      </ons-card>
+        <ons-card onclick="fn.pushPage({'id': 'youtube.html', 'title': '見て学ぶ'})">
+        <div class="title" id="text-title-big">見て学ぶ断捨離</div>
+        <div class="content" id="text1">youtubeで見て学ぼう！参考になりそうなものをまとめてみました。
+        </div>
+      </ons-card>
+            <ons-card onclick="fn.pushPage({'id': 'rinku.html', 'title': '初めての身近整理'})">
+        <div class="title" id="text-title-big">参考になるサイト</div>
+        <div class="content" id="text1">おすすめのサイトを紹介します！</div>
+      </ons-card>
+    </ons-page>
+  </template>
+
+  <template id="tyutorial.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>ヘルプ</ons-back-button>
+        </div>
+        <div class="center"></div>
+      </ons-toolbar>
+
+      <script>
+        ons.getScriptPage().onInit = function () {
+          this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+          var pullHook = document.getElementById('タイマー');
+
+        };
+      </script>
+
+      <style>
+        .pull-hook-content {
+          color: #666;
+          transition: transform .25s ease-in-out;
+        }
+      </style>
+
+      <ons-card>
+        <div class="content"> 
+            <div id="txt-title">1.捨ててから整理する</div><br>
+            <div id="text1">まずは不要なものから捨ててみましょう。ペットボトルや空き缶、燃えるゴミなどすぐに捨てれるものから実行していきましょう！</div><br>
+            <div id="txt-title-red">※他人の物は勝手に捨てないようにしましょう。</div><br>
+            <div id="txt-title">2.自分の生活をよくしている物だけを残す</div><br>
+            <div id="text1">自分の暮らしに良い影響を与えているものを残し、あってもなくても何も変わらないものと悪い影響を与えているものを捨てる、と考えればいいでしょう。<br>見ると心がなごむ飾り物とか、読むたびにインスピレーションを与えてくれる本、悲しいときに見ると元気になれる映画のDVDなんかも、自分の生活にプラスの影響を与えています。</div>
+            <br><div id="txt-title">3.今すぐやる</div><br>
+            <div id="text1">断捨離を成功させるために、もっとも重要なことは行動するということです。<br>
+          「家をきれいにしよう」と思ったら、準備に時間をかけすぎたり、うだうだ悩んだりするのではなく、すぐに、1つでも2つでも物を捨てるべきなのです。</div>
+          <br><div id="txt-title">4.少しずつ捨てる</div><br>
+           <div id="text1">1日中、片付けようとするのではなく、毎日10分か15分ぐらい時間をとっていらない物を捨てるようにしてください。<br>集中してやれば迷うことも少なくなります。</div>
+           <br><div id="txt-title">5.捨てるべき物はさっさと捨てる</div><br>
+           <div id="text1">捨てる予定の物を>いつまでも家に置いておかないのも、大事なポイントです。<br>すぐに捨てられないなら、捨てる結果に近づくアクションを取るべきです。さっさとメルカリに出品する。1週間たっても売れなかったら捨てるとか、さっさと誰かにあげるために電話をかけるとかするわけです。</div>
+           <br><div id="txt-title">6.記録してみましょう！</div><br>
+           <div id="text1">最後に捨てるものを記録してみましょう。このアプリは撮影することで記録することが出来ます。そして捨てた日をカレンダーで管理できます。現在捨てる物からジャンルや使わなかったものを買わないリストに登録してみましょう。では実際に試してみましょう！</div>
+
+        </div>
+      </ons-card>
+    </ons-page>
+  </template>
+
+  <template id="youtube.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>ヘルプ</ons-back-button>
+        </div>
+        <div class="center"></div>
+      </ons-toolbar>
+
+      <script>
+        ons.getScriptPage().onInit = function () {
+          this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+          var pullHook = document.getElementById('タイマー');
+        };
+      </script>
+
+      <style>
+        .pull-hook-content {
+          color: #666;
+          transition: transform .25s ease-in-out;
+        }
+      </style>
+
+      <ons-card onclick="fn.loadLink('https://www.youtube.com/watch?v=0dADFn4sAk0')">
+        <div class="title">捨てれないもの<br>あっさり捨てる心理テク</div>
+        <div class="content">メンタリストDaigoさんの動画です。</div>
+      </ons-card>
+        <ons-card onclick="fn.loadLink('https://www.youtube.com/watch?v=hz2202bmIyU')">
+        <div class="title">なぜ、モノを捨てると執着がなくなるの？（by 断捨離入門講座）</div>
+        <div class="content">「私の人生、このまま過ぎていくのかしら…」日々、そんな虚しさを抱えていた40代の主婦が、どうやって充実感を取り戻したのでしょうか？</div>
+      </ons-card>
+       <ons-card onclick="fn.loadLink('https://www.youtube.com/watch?v=M2PHjCop9zk')">
+        <div class="title">元ゴミ屋敷の住民がミニマリストになれた捨てる技術まとめ</div>
+        <div class="content">ミニマリストしぶさんの動画です。</div>
+      </ons-card>
+      <ons-card onclick="fn.loadLink('https://www.youtube.com/watch?v=1aHGVEBSAnk')">
+        <div class="title">断捨離しながら服捨てる。</div>
+        <div class="content">さっつんさんの動画です。寒くなって来たので衣替え！断捨離して捨てるお洋服たちを紹介します！可愛くて思い入れのある服は、未練があってなかなか別れられなかったりするんだよね〜。さよならする前に動画に収めておこう！</div>
+      </ons-card>
+      
+    </ons-page>
+  </template>
+
+  <template id="rinku.html">
+      <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>ヘルプ</ons-back-button>
+        </div>
+        <div class="center"></div>
+      </ons-toolbar>
+
+      <script>
+        ons.getScriptPage().onInit = function () {
+          this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+          var pullHook = document.getElementById('タイマー');
+        };
+      </script>
+
+      <style>
+        .pull-hook-content {
+          color: #666;
+          transition: transform .25s ease-in-out;
+        }
+      </style>
+
+      <ons-card onclick="fn.loadLink('https://manatopi.u-can.co.jp/life/171128_1715.html')">
+        <div class="title">断捨離で後悔しない！みんなが捨ててよかったモノ＆後悔したモノとは？</div>
+        <div class="content">余計な物を思い切って捨てる「断捨離」。部屋だけでなく気持ちもスッキリすると瞬く間にブームとなり、たくさんの物を捨てたという人も多いのではないでしょうか。しかし捨ててよかったと思う一方で、後悔する物もあるようで......。ブームが落ち着いた今だからこそ改めて知りたい断捨離の成功術を、All About「収納ガイド」の、すはらひろこさんに教えていただきました。</div>
+      </ons-card>
+        <ons-card onclick="fn.loadLink('https://www.youtube.com/watch?v=hz2202bmIyU')">
+        <div class="title">断捨離するにもコツがいる！捨てるためのテクニックとは</div>
+        <div class="content">家の中を片付けるためには、整理整頓すると同時に、思い切って物を捨てたほうがいいときもありますね。今回は、そんな捨て作業を円滑に行うためのコツについて、RoomClipユーザーさんたちから学んでいきたいと思います。どのように進めるのか、どのように物を減らすのかなど、参考にしてみてくださいね。</div>
+      </ons-card>
+       <ons-card onclick="fn.loadLink('https://blogger.ameba.jp/hashtags/%E6%96%AD%E6%8D%A8%E9%9B%A2')">
+        <div class="title">断捨離記事ランキング | Ameba公式ジャンル</div>
+        <div class="content">断捨離記事のまとめです！</div>
+      </ons-card>
+      <ons-card onclick="fn.loadLink('https://www.o-uccino.jp/article/posts/51967')">
+        <div class="title">断捨離で人生うまくいく！物を捨てられない人専用「迷わずグッバイ！5大不要品」リスト</div>
+      </ons-card>
+      
+      </ons-page>
+  </template>
+
+
+</body>
+</html>

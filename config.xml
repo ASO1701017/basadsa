@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" id="com.example.helloworld" version="1.0.0">
   <name>Minimum Template</name>
-  <description/>
+  <description>Made with Monaca (http://monaca.mobi)</description>
   <author/>
-  <content src="index.html"/>
+  <content src="title.html"/>
   <access origin="*"/>
   <allow-navigation href="*"/>
   <allow-intent href="itms:*"/>
   <allow-intent href="itms-apps:*"/>
-
   <preference name="DisallowOverscroll" value="true"/>
-  <preference name="Orientation" value="default"/>
-
+  <!-- Android縦画面固定 -->
+  <preference name="Orientation" value="portrait"/>
   <preference name="loglevel" value="DEBUG"/>
   <preference name="AndroidLaunchMode" value="singleTop"/>
   <preference name="ErrorUrl" value=""/>
@@ -19,7 +18,6 @@
   <preference name="KeepRunning" value="true"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="1000"/>
-
   <preference name="AllowInlineMediaPlayback" value="false"/>
   <preference name="AutoHideSplashScreen" value="true"/>
   <preference name="BackupWebStorage" value="cloud"/>
@@ -39,10 +37,11 @@
     <param name="ios-package" value="CDVLocalStorage"/>
   </feature>
   <preference name="UIWebViewDecelerationSpeed" value="normal"/>
-
   <preference name="monaca:AndroidIsPackageNameSeparate" value="false"/>
   <preference name="ios-XCBuildConfiguration-TARGETED_DEVICE_FAMILY" value="1,2"/>
   <platform name="ios">
+    <!-- ios縦画面で固定 -->
+    <preference name="orientation" value="portrait"/>
     <splash src="/res/ios/screen/Default@2x~universal~anyany.png"/>
     <icon src="/res/ios/icon/icon.png" width="57" height="57"/>
     <icon src="/res/ios/icon/icon@2x.png" width="114" height="114"/>
@@ -81,15 +80,35 @@
     <splash src="/res/android/screen/splash-port-xhdpi.9.png" density="port-xhdpi"/>
     <splash src="/res/android/screen/splash-port-xxhdpi.9.png" density="port-xxhdpi"/>
     <splash src="/res/android/screen/splash-port-xxxhdpi.9.png" density="port-xxxhdpi"/>
+    <splash src="/res/android/screen/splash-mdpi.png" density="mdpi"/>
   </platform>
-  <platform name="windows">
-    <icon src="/res/winrt/icon/package_logo_winrt.png" target="StoreLogo"/>
-    <icon src="/res/winrt/icon/app_logo_winrt.png" target="Square150x150Logo"/>
-    <icon src="/res/winrt/icon/app_small_logo_winrt.png" target="Square30x30Logo"/>
-    <icon src="/res/winrt/icon/app_tile_wide_logo_winrt.png" target="Wide315x150Logo"/>
-    <splash src="/res/winrt/screen/app_splash_screen_winrt.png" width="620" height="300"/>
+  <preference name="WindowsStorePublisherName" value="My Name"/>
+  <preference name="WindowsStoreIdentityName" value="4c2c4436-add3-9487-4dd9-1f6c6df1c302"/>
+  <preference name="monaca:MonacaBackendUrl" value="https://cloud.monaca.mobi/json-rpc/"/>
+  <preference name="monaca:MonacaBackendId" value="5cf885b4e788856000468bba"/>
+  <preference name="monaca:MonacaBackendApiKey" value="0b1fde4c042db6e5c511e673bb17a511c048d2a787af3729e047338fb6af4a67"/>
+  <platform name="electron">
+    <icon src="/res/electron/icon/icon_electron_16.png" width="16" height="16"/>
+    <icon src="/res/electron/icon/icon_electron_24.png" width="24" height="24"/>
+    <icon src="/res/electron/icon/icon_electron_32.png" width="32" height="32"/>
+    <icon src="/res/electron/icon/icon_electron_48.png" width="48" height="48"/>
+    <icon src="/res/electron/icon/icon_electron_64.png" width="64" height="64"/>
+    <icon src="/res/electron/icon/icon_electron_96.png" width="96" height="96"/>
+    <icon src="/res/electron/icon/icon_electron_128.png" width="128" height="128"/>
+    <icon src="/res/electron/icon/icon_electron_256.png" width="256" height="256"/>
+    <icon src="/res/electron/icon/icon_electron_512.png" width="512" height="512"/>
+    <splash src="/res/electron/screen/electron_splash_image.png" width="620" height="300"/>
   </platform>
-  <platform name="chrome">
-    <icon src="/platforms/chrome/icon.png" width="128" height="128"/>
-  </platform>
+  <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
+    <string>need camera access to take pictures</string>
+  </edit-config>
+  <edit-config target="NSPhotoLibraryUsageDescription" file="*-Info.plist" mode="merge">
+    <string>need to photo library access to get pictures from there</string>
+  </edit-config>
+  <edit-config target="NSLocationWhenInUseUsageDescription" file="*-Info.plist" mode="merge">
+    <string>need location access to find things nearby</string>
+  </edit-config>
+  <edit-config target="NSPhotoLibraryAddUsageDescription" file="*-Info.plist" mode="merge">
+    <string>need to photo library access to save pictures there</string>
+  </edit-config>
 </widget>

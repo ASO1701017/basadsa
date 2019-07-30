@@ -1,0 +1,115 @@
+.button{
+  display: block;
+  position: absolute;
+  bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 55px;
+  border-radius: 30px;
+  background-color: hsl(141, 71%, 48%);
+  font-size: 20pt;
+  text-align: center;
+  line-height: 50px;
+  font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+}
+
+#top{
+  font-size: 20pt;
+  font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+  text-align: center;
+  position: relative;
+  top:0%;
+}
+
+#def{
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 14pt;
+    letter-spacing: 0.1em;
+    text-align: center;
+    font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+}
+
+#def1{
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 14pt;
+    letter-spacing: 0.1em;
+    text-align: center;
+    font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+    position: relative;
+    top:-3%;
+}
+
+.wrapper {
+    max-width: 350px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .txt {
+    display: inline-block;
+    text-align: left;
+    font-size: 18pt;
+    letter-spacing: 0.1em;
+    font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+    color: 	crimson;
+  }
+
+#steptop{
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 25pt;
+  font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+  text-align: center;
+  position: relative;
+  top:-3%;
+}
+
+#stepdef{
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 18pt;
+    letter-spacing: 0.1em;
+    text-align: center;
+    font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+}
+
+.red{
+  color: red;
+  position: relative;
+  top:0%;
+}
+
+.wrapper1{
+    max-width: 320px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    top:-7%;
+  }
+  .txt1 {
+    display: inline-block;
+    text-align: left;
+    font-size: 14pt;
+    letter-spacing: 0.1em;
+    font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+}
+
+body{
+  background-color: lavender;
+}
+
+.blue{
+  color: royalblue;
+}
+
+.orenge{
+  color: darkorange;
+}
+
+
+

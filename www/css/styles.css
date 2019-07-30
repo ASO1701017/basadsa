@@ -1,0 +1,145 @@
+/* set padding for iOS7 status bar */
+.ua-ios-7 .ui-page, .ua-ios-8, .ui-page {
+    padding-top: 63px !important;
+}
+
+.ua-ios-7 .ui-header, .ua-ios-8 .ui-header {
+    top: 20px;
+}
+
+#text1{
+  font-size: 12pt;
+}
+
+#txt-title{
+  font-size: 15pt;
+}
+
+#txt-title-red{
+  font-size: 14pt;
+  color: red;
+}
+
+#text-title-big{
+  font-size: 20pt; 
+}
+
+#timer{
+  font-size: 80pt;
+  text-align: center;
+  position: relative;
+  top: 20%;
+}
+
+#button-place1{
+  position: absolute;
+  top: 50%;
+  left: 10%;
+}
+
+#button-place2{
+  position: absolute;
+  top: 50%;
+  right: 10%;
+}
+
+#button-place3{
+  position: absolute;
+  top: 5%;
+  right: 10%;
+}
+
+#button-place4{
+  position: absolute;
+  top: 70%;
+  left: 10%;
+}  
+
+.btn-square-min {
+   position: relative;
+  display: inline-block;
+  font-weight: bold;
+  padding: 0.25em 0.5em;
+  text-decoration: none;
+  color: #FFF;
+  background: #00bcd4;
+  transition: .4s;
+  width:140px;
+  height:80px;
+  font-size: 20pt; 
+}
+
+.btn-square-reset {
+   position: relative;
+  display: inline-block;
+  font-weight: bold;
+  padding: 0.25em 0.5em;
+  text-decoration: none;
+  color: #FFF;
+  background: #00bcd4;
+  transition: .4s;
+  width:80px;
+  height:60px;
+  font-size: 10pt; 
+}
+
+.btn-square-start {
+   position: relative;
+  display: inline-block;
+  font-weight: bold;
+  padding: 0.25em 0.5em;
+  text-decoration: none;
+  color: #FFF;
+  background: #00bcd4;
+  transition: .4s;
+  width:300px;
+  height:120px;
+  font-size: 20pt; 
+}
+
+.btn-flat-logo:hover {
+  background: #1ec7bb;
+}
+
+.text-area{
+  height: 2pc;
+  width: 20pc;
+  font-size: 20px;
+  position: absolute;
+  top: 5%;
+  left: 4%
+  
+}
+
+.text-bigarea{
+  width: 21pc;
+  font-size: 16px;
+  position: absolute;
+  top: 17%;
+  left: 4%
+}
+
+.text-num{
+  position: absolute;
+  top: 69%;
+  left: 4%;
+  height: 2pc;
+  width: 20pc;
+  font-size: 16px;
+  text-align: center;
+}
+
+.text-save{
+  position: absolute;
+  top: 75%;
+  left: 4%;
+  height: 4pc;
+  width: 22pc;
+}
+.text-save1{
+  position: absolute;
+  top: 80%;
+  left: 4%;
+  height: 4pc;
+  width: 22pc;
+}

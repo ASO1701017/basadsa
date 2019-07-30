@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <script src="lib/onsenui/js/onsenui.min.js"></script>
+
+  <!-- OnsenUIの使用 -->
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+  <!-- css/start.cssを使用 -->
+  <link rel="stylesheet" href="css/start.css">
+
+  <script>
+    ons.ready(function() {
+      console.log("Onsen UI is ready!");
+    });
+
+    if (ons.platform.isIPhoneX()) {
+      document.documentElement.setAttribute('onsflag-iphonex-portrait', '');
+      document.documentElement.setAttribute('onsflag-iphonex-landscape', '');
+    }
+
+    //ncmbの設定
+    var applicationKey = "e5487cf4017eedf884be6412ce8533eb7cc7479f476fb1eff68d3b11a9d06c17";
+    var clientKey = "507880bfde91eee6800847a86657e56710a4313612cf4be1df8ca73dc1df7401";
+    var  ncmb = new NCMB(applicationKey,clientKey);
+      
+    //デバイスデータの取得
+    monaca.getDeviceId(function(id){
+      var device = id;
+      //DBへの登録開始
+      var userData = ncmb.DataStore("UserData");
+      userData.equalTo("device",device) //同じ端末情報があるか
+        .fetchAll()//すべて取り出す
+        .then(function(results){//成功
+          var test = JSON.stringify(results);//結果をtextに格納
+          if(test == "[]"){//中に同じ端末情報がなかった場合。
+            var UserData = ncmb.DataStore("UserData")
+            var userData = new UserData();
+            //フラグとデバイスデータの登録
+            userData.set("startFlag","false")//チュートリアル未読
+            userData.set("device",device)//ユーザーの端末情報の登録
+            .save();//保存
+          }
+        })
+        .catch(function(error){//失敗
+          alert("再起動してください");
+        });
+    });
+
+    document.addEventListener('init', function(event) {    //チュートリアルの画面遷移制御
+      var page = event.target;
+
+      if (page.id === 'page1') {
+        page.querySelector('#push-button').onclick = function() {//push-buttonを押すとpage2.htmlに進む
+        document.querySelector('#myNavigator').pushPage('page2.html', {data: {title: 'title'}});
+      };
+    } else if (page.id === 'page2') {
+        page.querySelector('#push-button1').onclick = function() {
+        document.querySelector('#myNavigator').pushPage('page3.html', {data: {title: 'step1'}});
+      };
+    }else if (page.id === 'page3') {
+        page.querySelector('#push-button2').onclick = function() {
+        document.querySelector('#myNavigator').pushPage('page4.html', {data: {title: 'step2'}});
+      };
+    }else if (page.id === 'page4') {
+        page.querySelector('#push-button3').onclick = function() {
+        document.querySelector('#myNavigator').pushPage('page5.html', {data: {title: 'step3'}});
+      };
+    }else if (page.id === 'page5') {
+        page.querySelector('#push-button4').onclick = function() {
+        document.querySelector('#myNavigator').pushPage('page6.html', {data: {title: 'step4'}});
+      };
+    }else if (page.id === 'page6') {
+        page.querySelector('#push-button5').onclick = function() {
+        document.querySelector('#myNavigator').pushPage('page7.html', {data: {title: 'step5'}});
+      };
+    }else if (page.id === 'page7') {
+        page.querySelector('#push-button6').onclick = function() {
+        window.location.href = 'calender.html';//index.htmlへ飛ぶ
+      };
+    }
+  });
+</script>
+</head>
+<body>
+ 
+<ons-navigator swipeable id="myNavigator" page="page1.html"></ons-navigator>
+
+  <template id="page1.html"> <!-- page1のテンプレ -->
+  <ons-page id="page1">
+    <!-- ツールバー -->
+    <ons-toolbar>
+      <div class="center" id="top" style="background-color: snow;">初めまして(*^-^*)</div>
+    </ons-toolbar modifier="transparent>
+
+    <div class="background" style="background-color: White;"></div>
+    <p id="top">DEMESIのダウンロード<br>ありがとうございます！！</p>
+    <p id="def" class="set1">以下の手順であなたの買い物生活をサポートします！</p>
+    <div class="wrapper" id="set2">
+    <p class="txt" >
+    1.身近整理をする<br>
+    2.買わないものルールを作る<br>
+    3.買ったものを記録する<br>
+    4.以上の流れを繰り返す<br>
+    </p>
+    </div>
+    <p id="def1">今から始まるのは身近整理の<br>説明です。まずは読んでみて<br>大切なことを理解しましょう。</p>
+
+    <ons-button id="push-button" class="button" modifier="large--cta">次へ</ons-button>
+  </ons-page>
+</template>
+
+<template id="page2.html"><!-- page2のテンプレ -->
+  <ons-page id="page2">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>戻る</ons-back-button></div>
+      <div class="center" id="top" style="background-color: snow;">ステップ1</div>
+    </ons-toolbar modifier="transparent>
+    <div class="background" style="background-color: White;"></div>
+
+    <p id="steptop"><br>捨ててから整理する</p>
+    <p id="stepdef">まずは<spann class="blue">不要なもの</spann>から捨ててみましょう！</p>
+    <p id="stepdef" class="red">※他人の物は勝手に捨てないようにしましょう。<br>
+      ※自分で「これは私の人生に必要なものかな？」と考えながら決めてください。
+    </p>
+
+   <ons-button id="push-button1" class="button" modifier="large--cta">次へ</ons-button>
+
+  </ons-page>
+</template>
+
+<template id="page3.html">
+  <ons-page id="page3"><!-- page3のテンプレ -->
+    </ons-toolbar>
+    <ons-toolbar>
+      <div class="left"><ons-back-button>戻る</ons-back-button></div>
+      <div class="center" id="top" style="background-color: snow;">ステップ2</div>
+    </ons-toolbar modifier="transparent>
+    <div class="background" style="background-color: White;"></div>
+
+    <p id="steptop">自分の生活を<spann class="orenge">よくしている物</spann>だけを残す</p>
+    <div class="wrapper1">
+    <p class="txt1" >自分の暮らしに<spann class="orenge">良い影響</spann>を与えているものを残し、<spann class="blue">あってもなくても何も変わらないもの</spann>と<spann class="blue">悪い影響</spann>を与えているものを捨てる、と考えればいいでしょう。<br><br>
+    見ると心がなごむ飾り物とか、読むたびにインスピレーションを与えてくれる本、悲しいときに見ると元気になれる映画のDVDなんかも、<spann class="orenge">自分の生活にプラスの影響</spann>を与えています。
+    </p>
+    </div>
+    <ons-button id="push-button2" class="button" modifier="large--cta">次へ</ons-button>
+  </ons-page>
+</template>
+
+<template id="page4.html"><!-- page4のテンプレ -->
+  <ons-page id="page4">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>戻る</ons-back-button></div>
+      <div class="center" id="top" style="background-color: snow;">ステップ3</div>
+    </ons-toolbar modifier="transparent>
+    <div class="background" style="background-color: White;"></div>
+
+    <p id="steptop"><br>今すぐやる</p><br>
+    <p id="stepdef"></p>
+    <div class="wrapper1">
+    <p class="txt1" >断捨離を成功させるために、もっとも重要なことは<spann class="orenge">行動する</spann>ということです。<br><br>
+    「家をきれいにしよう」と思ったら、準備に時間をかけすぎたり、うだうだ悩んだりするのではなく、すぐに、1つでも2つでも物を捨てるべきなのです。
+    </p>
+    </div>
+   <ons-button id="push-button3" class="button" modifier="large--cta">次へ</ons-button>
+  </ons-page>
+</template>
+
+<template id="page5.html"><!-- page5のテンプレ -->
+  <ons-page id="page5">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>戻る</ons-back-button></div>
+      <div class="center" id="top" style="background-color: snow;">ステップ4</div>
+    </ons-toolbar modifier="transparent>
+    <div class="background" style="background-color: White;"></div>
+
+    <p id="steptop"><br>少しずつ捨てる</p>
+    <p id="stepdef"></p>
+    <div class="wrapper1">
+    <p class="txt1" >1日中、片付けようとするのではなく、<spann class="orenge">毎日10分か15分ぐらい</spann>時間をとっていらない物を捨てるようにしてください。<br><br>
+    だらだらやるのではなく5分、10分、15分などごく短い時間に集中して捨てることを試してください。<spann class="orenge">集中してやれば</spann>ぐだぐだ迷うこともなくなります。
+    </p>
+    </div>
+   <ons-button id="push-button4" class="button" modifier="large--cta">次へ</ons-button>
+  </ons-page>
+</template>
+
+<template id="page6.html"><!-- page6のテンプレ -->
+  <ons-page id="page6">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>戻る</ons-back-button></div>
+      <div class="center" id="top" style="background-color: snow;">ステップ5</div>
+    </ons-toolbar modifier="transparent>
+    <div class="background" style="background-color: White;"></div>
+
+    <p id="steptop">捨てるべき物は<br>さっさと捨てる</p>
+    <p id="stepdef"></p>
+    <div class="wrapper1">
+    <p class="txt1" >捨てる予定の物を<spann class="orenge">いつまでも家に置いておかない</spann>のも、大事なポイントです。<br><br>
+    すぐに捨てられないなら、捨てる結果に近づくアクションを取るべきです。さっさとメルカリに出品する。1週間たっても売れなかったら捨てるとか、さっさと誰かにあげるために電話をかけるとかするわけです。
+    </p>
+    </div>
+   <ons-button id="push-button5" class="button" modifier="large--cta">次へ</ons-button>
+  </ons-page>
+</template>
+
+<template id="page7.html"><!-- page7のテンプレ -->
+  <ons-page id="page7">
+    <script>
+      var userData = ncmb.DataStore("UserData")
+      userData.fetch()
+        .then(function(userData){
+          console.log("取得成功"+JSON.stringify(userData));
+          userData.set("startFlag","true");
+          userData.update();
+        })
+    </script>
+    <ons-toolbar>
+      <div class="left"><ons-back-button>戻る</ons-back-button></div>
+      <div class="center" id="top" style="background-color: snow;">ステップ6：最後に</div>
+    </ons-toolbar modifier="transparent>
+    <div class="background" style="background-color: White;"></div>
+
+    <p id="steptop"><br>記録してみましょう</p>
+    <p id="stepdef"></p>
+    <div class="wrapper1">
+    <p class="txt1" >最後に<spann class="orenge">捨てるものを記録</spann>してみましょう。このアプリは撮影することで記録することが出来ます。そして捨てた日をカレンダーで管理できます。<br><br>現在捨てる物からジャンルや使わなかったものを<spann class="orenge">買わないリスト</spann>に登録してみましょう！<br>では<spann class="orenge">実際に試してみましょう！</spann><br>身近整理は画面下にあるタブから選択して開くことが出来ます。
+    </p>
+    </div>
+   <ons-button id="push-button6" class="button" modifier="large--cta">カレンダーへ</ons-button>
+  </ons-page>
+</template>
+  
+</body>
+</html>
